@@ -60,13 +60,74 @@ The `print_summary` function takes in the `lr_result` list object as an argument
 - Some of the main metrics, including Prevalence, accuracy, Specificity, Sensitivity, Diagnostic Odds Ratio, and False Discovery Ratio.
 - The confidence intervals found by bootstrapping, with default alpha value of 0.05 and replications = 20.
 
+You can also plot the graph of the model you created with respect to different variables using the function `plot_logistic_regression` which takes the `lr_result` object as the only argument.
 
-If you would like to use a different cut_off value for your confusion matrix, You can do that as well. Use the `plot_confusion_matrix` function. It takes two arguments, your `lr_result` object and `cut_off` value.
+```{r plot}
+plot_logistic_regression(lr_result = lr_result)
+```
 
-## Finding a different confusion matrix
+If you would like to use a different cut_off value for your confusion matrix, You can do that as well. Use the `get_confusion_matrix` or `plot_confusion_matrix` functions. It takes two arguments, your `lr_result` object and `cut_off` value.
+
+## Plotting a different confusion matrix
 ```{r confusion_matrix}
+# To get the Confusion matrix as a list
+result <- get_confusion_matrix(lr_result = lr_result, cut_off = 0.4)
+print(result)
+
+# To plot the confusion matrix as a ggplot
 result <- plot_confusion_matrix(lr_result = lr_result, cut_off = 0.4)
 ```
 
 The result, in this case is the ggplot object itself. So, if you would like to plot it yourself or save it as an image, you can do that as well.
+
+To get a confidence interval on the variables with your choosing of alpha, and replication count, call the `get_beta_confidence_intervals` function with the arguments of `lr_result`, `alpha` and `replications`. The default of `alpha` is 0.05, and the default for `replications` is 20.
+
+## Confidence Intervals
+```{r confidence_interval}
+get_beta_confidence_intervals(lr_result = lr_result, alpha = 0.05, replications = 20)
+```
+
+You can also get different metrics based on the confusion matrix. You have the option of getting Prevalence, Accuracy, Sensitivity, Specificity, False Discovery Ratio, and Diagnostic Odds Ratio.
+
+```{r metrics}
+# Prevalence
+get_prevalence(lr_result, cut_off = 0.5)
+
+# Accuracy
+get_accuracy(lr_result, cut_off = 0.5)
+
+# Sensitivity
+get_sensitivity(lr_result, cut_off = 0.5)
+
+# Specificity
+get_specificity(lr_result, cut_off = 0.5)
+
+# False Discovery Ratio
+get_false_discovery_ratio(lr_result, cut_off = 0.5)
+
+# Diagnostic Odds Ratio
+get_diagnostic_odds_ratio(lr_result, cut_off = 0.5)
+```
+
+You can plot these metrics for all cut_off values as well, to see which cut_off values give the best results. All of the plotting metric functions take the `lr_result` as the only argument.
+
+```{r plotting_metrics}
+# Plotting Prevalence
+plot_prevalence(lr_result)
+
+# Plotting Accuracy
+plot_accuracy(lr_result)
+
+# Plotting Sensitivity
+plot_sensitivity(lr_result)
+
+# Plotting Specificity
+plot_specificity(lr_result)
+
+# Plotting False Discovery Ratio
+plot_false_discovery_ratio(lr_result)
+
+# Plotting Diagnostic Odds Ratio
+plot_diagnostic_odds_ratio(lr_result)
+```
 
