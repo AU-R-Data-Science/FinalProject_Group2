@@ -3,11 +3,11 @@ Type: Package
 Title: Logistic Regression
 Version: 0.1.0
 Authors@R: c(
-    person("Parker", "Elliott", email = "pre0004@auburn.edu", role = c("aut")),
-    person("Saksham", "Goel", role = "aut", "cre"),
-    person("Lydia", "Reedstrom", role = "aut")
+    person("Saksham", "Goel", email = "szg0112@auburn.edu", role = c("aut", "cre")),
+    person("Parker", "Elliott", email = "pre0004@auburn.edu", role = "aut"),
+    person("Lydia", "Reedstrom", email = "lgr0020@auburn.edu", role = "aut")
     )
-Maintainer: The package maintainer <szg0112@auburn.edu>
+Maintainer: Saksham Goel <szg0112@auburn.edu>
 Description: This package is created as the final project for STAT 5210 at Auburn University. It performs the basic functionality of Logistic Regression, including finding the optimal coefficients, finding confidence intervals for those coefficients, plotting the resulting function found, finding the confusion matrix etc.
 License: What license is it under?
 Encoding: UTF-8
