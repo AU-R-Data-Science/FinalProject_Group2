@@ -4,16 +4,16 @@
 \alias{get_beta_confidence_intervals}
 \title{Finding Confidence Intervals}
 \usage{
-get_beta_confidence_intervals(response, predictors, alpha, replications = 20)
+get_beta_confidence_intervals(lr_result, alpha = 0.05, replications = 20)
 }
 \arguments{
-\item{response}{A \code{double} value of the vector containing the response of interest.}
-
-\item{predictors}{An \eqn{n \times p} \code{double} value of the matrix containing the values of the predictors.}
-
 \item{alpha}{A \code{double} value of the alpha used to find in the quantile function to find the confidence intervals.}
 
 \item{replications}{A \code{double} value of the number of replications, or iterations, used in bootstrap to find the confidence intervals.}
+
+\item{response}{A \code{double} value of the vector containing the response of interest.}
+
+\item{predictors}{An \eqn{n \times p} \code{double} value of the matrix containing the values of the predictors.}
 }
 \description{
 This function computes and prints bootstrap confidence intervals for each coefficient found with the 'get_beta_estimate' function.

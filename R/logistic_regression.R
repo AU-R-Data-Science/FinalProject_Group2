@@ -3,7 +3,7 @@ get_initial_beta <- function(y, X)
     solve(t(X) %*% X) %*% t(X) %*% y
 }
 
-logistic_regression <- function(beta, y, X)
+optimizing_function <- function(beta, y, X)
 {
     p <- 1 / (1 + exp(-X %*% beta))
     sum(-((1 - y) * log(1 - p)) - (y * log(p)))
@@ -24,21 +24,45 @@ logistic_regression <- function(beta, y, X)
 #' @export
 get_beta_estimate <- function(response, predictors)
 {
-    Intercept <- rep(1, length(response))
-    predictors <- cbind(Intercept, predictors)
     initial_beta <- get_initial_beta(response, predictors)
     beta_est <- optim(get_initial_beta(response, predictors),
-                      logistic_regression,
+                      optimizing_function,
                       y = response,
                       X = predictors)$par
 
     output <- list("initial_beta" = initial_beta,
-                   "beta_estimate" = beta_est,
-                   "response" = response,
-                   "predictors" = predictors)
-    class(output) <- "logistic_regression"
-
+                   "beta_estimate" = beta_est)
     return(output)
+}
+
+#' The main Logistic Regression function
+#' @description This function adds intercept column and uses get_beta_estimate function to find coefficients of the logistic regression
+#' @param response A \code{double} value of the vector containing the response of interest.
+#' @param predictors An \eqn{n \times p} \code{double} value of the matrix containing the values of the predictors.
+#' @return A \code{list} from running the get_beta_estimate function and containing the following objects:
+#' \describe{
+#'  \item{initial_beta}{The initial values of coefficients}
+#'  \item{beta_estimate}{The estimated coefficients of the logistic regression}
+#'  \item{response}{The \code{double} vector containing the response used for the estimation}
+#'  \item{predictors}{The \eqn{n \times p} \code{double} value of the matrix containing the values of the predictors used for the estimation}
+#' }
+#' @author Saksham Goel
+#' @export
+logistic_regression <- function(response, predictors)
+{
+    Intercept <- rep(1, length(response))
+    predictors <- cbind(Intercept, predictors)
+
+    result <- get_beta_estimate(response, predictors)
+
+    lr_result <- list("initial_beta" = result$initial_beta,
+                      "beta_estimate" = result$beta_estimate,
+                      "response" = response,
+                      "predictors" = predictors)
+
+    class(lr_result) <- "logistic_regression"
+
+    return(lr_result)
 }
 
 #' Finding Confidence Intervals
@@ -49,18 +73,18 @@ get_beta_estimate <- function(response, predictors)
 #' @param replications A \code{double} value of the number of replications, or iterations, used in bootstrap to find the confidence intervals.
 #' @author Parker Randall Elliott
 #' @export
-get_beta_confidence_intervals <- function(response, predictors, alpha, replications = 20)
+get_beta_confidence_intervals <- function(lr_result, alpha = 0.05, replications = 20)
 {
-    beta_mean <- matrix(NA, ncol = ncol(predictors), nrow = replications)
+    beta_mean <- matrix(NA, ncol = ncol(lr_result$predictors), nrow = replications)
 
-    sample_X <- cbind(response, predictors)
+    sample_X <- cbind(lr_result$response, lr_result$predictors)
 
     for(i in 1:replications)
     {
         new_sample <- sample_X[sample(1:nrow(sample_X), replace = TRUE), ]
 
         beta_mean[i,] <- get_beta_estimate(response = new_sample[ ,1],
-                                           predictors = new_sample[,2:ncol(new_sample)])$beta_estimate
+                                          predictors = new_sample[,2:ncol(new_sample)])$beta_estimate
     }
 
     cat("Bootstrap Confidence Intervals with alpha =",
@@ -493,7 +517,7 @@ plot_diagnostic_odds_ratio <- function(lr_result)
         dor <- get_diagnostic_odds_ratio(lr_result, cut_off = i)
         dor_df[nrow(dor_df) + 1,] <- c(i, dor)
     }
-    plot <- ggplot2::ggplot(data = dor_df, aes(x = Cut_Off, y = Diagnostic_Odds_Ratio, fill = Cut_Off)) +
+    plot <- ggplot2::ggplot(data = dor_df, ggplot2::aes(x = Cut_Off, y = Diagnostic_Odds_Ratio, fill = Cut_Off)) +
         ggplot2::geom_bar(stat = "identity") +
         ggplot2::scale_x_continuous("Cut Off Values",
                            labels = as.character(dor_df$Cut_Off),
@@ -589,9 +613,7 @@ print_summary <- function(lr_result)
         cat("False Discovery Ratio:", get_false_discovery_ratio(lr_result), "\n")
         cat("Diagnostic Odds Ratio:", get_diagnostic_odds_ratio(lr_result), "\n\n")
 
-        get_beta_confidence_intervals(lr_result$response,
-                                      lr_result$predictors,
-                                      alpha = 0.05)
+        get_beta_confidence_intervals(lr_result)
     }
 }
 
@@ -621,3 +643,4 @@ simulate_testing_data <- function(n)
     return(list("response" = response,
                 "predictors" = predictors))
 }
+
