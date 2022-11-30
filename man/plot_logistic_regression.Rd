@@ -16,7 +16,7 @@ plot_logistic_regression(lr_result)
 }}
 }
 \value{
-A \code{list} value of ggplot object created.
+A \code{list} of \code{list}, where each object of the list is the value of ggplot object created for a variable.
 }
 \description{
 This function plots the predicted values found from running the logistic regression.

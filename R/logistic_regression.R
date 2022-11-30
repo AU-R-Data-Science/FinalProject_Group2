@@ -24,6 +24,8 @@ logistic_regression <- function(beta, y, X)
 #' @export
 get_beta_estimate <- function(response, predictors)
 {
+    Intercept <- rep(1, length(response))
+    predictors <- cbind(Intercept, predictors)
     initial_beta <- get_initial_beta(response, predictors)
     beta_est <- optim(get_initial_beta(response, predictors),
                       logistic_regression,
@@ -268,11 +270,11 @@ plot_confusion_matrix <- function(lr_result, cut_off = 0.5)
     values <- c(cm$tn, cm$fp, cm$fn, cm$tp)
     df <- data.frame(Target, Prediction, values)
 
-    plot <- ggplot(data =  df, mapping = aes(x = Target, y = Prediction)) +
-        geom_tile(aes(fill = values), colour = "white") +
-        geom_text(aes(label = sprintf("%1.0f", values)), vjust = 1) +
-        scale_fill_gradient(low = "azure1", high = "lightblue4") +
-        theme_bw() + theme(legend.position = "none")
+    plot <- ggplot2::ggplot(data =  df, mapping = ggplot2::aes(x = Target, y = Prediction)) +
+        ggplot2::geom_tile(ggplot2::aes(fill = values), colour = "white") +
+        ggplot2::geom_text(ggplot2::aes(label = sprintf("%1.0f", values)), vjust = 1) +
+        ggplot2::scale_fill_gradient(low = "azure1", high = "lightblue4") +
+        ggplot2::theme_bw() + ggplot2::theme(legend.position = "none")
 
     print(plot)
     return(plot)
@@ -305,9 +307,9 @@ plot_prevalence <- function(lr_result)
         prevalence_df[nrow(prevalence_df) + 1,] <- c(i, prevalence)
     }
 
-    plot <- ggplot(data = prevalence_df, aes(x = Cut_Off, y = Prevalence, fill = Cut_Off)) +
-        geom_bar(stat = "identity") +
-        scale_x_continuous("Cut Off Values",
+    plot <- ggplot2::ggplot(data = prevalence_df, ggplot2::aes(x = Cut_Off, y = Prevalence, fill = Cut_Off)) +
+        ggplot2::geom_bar(stat = "identity") +
+        ggplot2::scale_x_continuous("Cut Off Values",
                            labels = as.character(prevalence_df$Cut_Off),
                            breaks = prevalence_df$Cut_Off)
 
@@ -343,9 +345,9 @@ plot_accuracy <- function(lr_result)
         accuracy_df[nrow(accuracy_df) + 1,] <- c(i, accuracy)
     }
 
-    plot <- ggplot(data = accuracy_df, aes(x = Cut_Off, y = Accuracy, fill = Cut_Off)) +
-        geom_bar(stat = "identity") +
-        scale_x_continuous("Cut Off Values",
+    plot <- ggplot2::ggplot(data = accuracy_df, ggplot2::aes(x = Cut_Off, y = Accuracy, fill = Cut_Off)) +
+        ggplot2::geom_bar(stat = "identity") +
+        ggplot2::scale_x_continuous("Cut Off Values",
                            labels = as.character(accuracy_df$Cut_Off),
                            breaks = accuracy_df$Cut_Off)
 
@@ -380,9 +382,9 @@ plot_sensitivity <- function(lr_result)
         sensitivity <- get_sensitivity(lr_result, cut_off = i)
         sensitivity_df[nrow(sensitivity_df) + 1,] <- c(i, sensitivity)
     }
-    plot <- ggplot(data = sensitivity_df, aes(x = Cut_Off, y = Sensitivity, fill = Cut_Off)) +
-        geom_bar(stat = "identity") +
-        scale_x_continuous("Cut Off Values",
+    plot <- ggplot2::ggplot(data = sensitivity_df, ggplot2::aes(x = Cut_Off, y = Sensitivity, fill = Cut_Off)) +
+        ggplot2::geom_bar(stat = "identity") +
+        ggplot2::scale_x_continuous("Cut Off Values",
                            labels = as.character(sensitivity_df$Cut_Off),
                            breaks = sensitivity_df$Cut_Off)
 
@@ -417,9 +419,9 @@ plot_specificity <- function(lr_result)
         specificity <- get_specificity(lr_result, cut_off = i)
         specificity_df[nrow(specificity_df) + 1,] <- c(i, specificity)
     }
-    plot <- ggplot(data = specificity_df, aes(x = Cut_Off, y = Specificity, fill = Cut_Off)) +
-        geom_bar(stat = "identity") +
-        scale_x_continuous("Cut Off Values",
+    plot <- ggplot2::ggplot(data = specificity_df, ggplot2::aes(x = Cut_Off, y = Specificity, fill = Cut_Off)) +
+        ggplot2::geom_bar(stat = "identity") +
+        ggplot2::scale_x_continuous("Cut Off Values",
                            labels = as.character(specificity_df$Cut_Off),
                            breaks = specificity_df$Cut_Off)
 
@@ -454,9 +456,9 @@ plot_false_discovery_ratio <- function(lr_result)
         fdr <- get_false_discovery_ratio(lr_result, cut_off = i)
         fdr_df[nrow(fdr_df) + 1,] <- c(i, fdr)
     }
-    plot <- ggplot(data = fdr_df, aes(x = Cut_Off, y = False_Discovery_Ratio, fill = Cut_Off)) +
-        geom_bar(stat = "identity") +
-        scale_x_continuous("Cut Off Values",
+    plot <- ggplot2::ggplot(data = fdr_df, ggplot2::aes(x = Cut_Off, y = False_Discovery_Ratio, fill = Cut_Off)) +
+        ggplot2::geom_bar(stat = "identity") +
+        ggplot2::scale_x_continuous("Cut Off Values",
                            labels = as.character(fdr_df$Cut_Off),
                            breaks = fdr_df$Cut_Off)
 
@@ -491,9 +493,9 @@ plot_diagnostic_odds_ratio <- function(lr_result)
         dor <- get_diagnostic_odds_ratio(lr_result, cut_off = i)
         dor_df[nrow(dor_df) + 1,] <- c(i, dor)
     }
-    plot <- ggplot(data = dor_df, aes(x = Cut_Off, y = Diagnostic_Odds_Ratio, fill = Cut_Off)) +
-        geom_bar(stat = "identity") +
-        scale_x_continuous("Cut Off Values",
+    plot <- ggplot2::ggplot(data = dor_df, aes(x = Cut_Off, y = Diagnostic_Odds_Ratio, fill = Cut_Off)) +
+        ggplot2::geom_bar(stat = "identity") +
+        ggplot2::scale_x_continuous("Cut Off Values",
                            labels = as.character(dor_df$Cut_Off),
                            breaks = dor_df$Cut_Off)
 
@@ -511,14 +513,45 @@ plot_diagnostic_odds_ratio <- function(lr_result)
 #'  \item{response}{The \code{double} vector containing the response used for the estimation.}
 #'  \item{predictors}{The \eqn{n \times p} \code{double} value of the matrix containing the values of the predictors used for the estimation.}
 #' }
-#' @return A \code{list} value of ggplot object created.
+#' @return A \code{list} of \code{list}, where each object of the list is the value of ggplot object created for a variable.
 #' @author Saksham Goel
 #' @export
 plot_logistic_regression <- function(lr_result)
 {
-    plot <- 3
-    print(plot)
-    return(plot)
+    plots <- list()
+
+    mean <- vector()
+
+    plot_predictors <- matrix(NA, nrow = 500, ncol = ncol(lr_result$predictors))
+    for(i in 1:ncol(lr_result$predictors))
+    {
+        mean <- append(mean, mean(lr_result$predictors[,i]))
+        plot_predictors[, i] <- rep(mean[i], 500)
+    }
+    for(i in 2:ncol(lr_result$predictors))
+    {
+        current_predictors <- plot_predictors
+        current_predictor <- lr_result$predictors[,i]
+
+        predicted_data <- data.frame(current_predictor = seq(min(current_predictor), max(current_predictor), len = 500))
+
+        current_predictors[, i] <- predicted_data$current_predictor
+        predicted_data$response <- 1 / (1 + exp(-(current_predictors %*% lr_result$beta_estimate)))
+
+        #plot(lr_result$response ~ current_predictor)
+        #lines(response ~ current_predictor, predicted_data, lwd = 2, col = "green")
+
+        xlabel <- paste("Variable", i)
+        plot <- ggplot2::ggplot(x = current_predictor, y = lr_result$response) +
+            ggplot2::geom_point(ggplot2::aes(y = lr_result$response, x = current_predictor)) +
+            ggplot2::geom_line(ggplot2::aes(y = response, x = current_predictor), data = predicted_data, color = "blue") +
+            ggplot2::ylab("Probability") +
+            ggplot2::xlab(xlabel)
+        print(plot)
+
+        plots <- c(plots, list(plot))
+    }
+    return(plots)
 }
 
 #' Print Summary
@@ -576,11 +609,10 @@ print_summary <- function(lr_result)
 simulate_testing_data <- function(n)
 {
     set.seed(1)
-    Intercept <- rep(1, n)
     gender <- sample(c(0, 1), size = n, replace = TRUE)
     age <- round(runif(n, 18, 80))
 
-    predictors <- cbind(Intercept, gender, age)
+    predictors <- cbind(gender, age)
 
     xb <- -9 + 3.5*gender + 0.2*age
     p <- 1/(1 + exp(-xb))
