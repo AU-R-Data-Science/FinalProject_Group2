@@ -1,0 +1,72 @@
+---
+title: "Logistic Regression Vignette"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Logistic Regression Vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Source: [`FinalProject_Group2/vignettes/Logistic_Regression_Vignette.Rmd`](https://github.com/AU-R-Data-Science/FinalProject_Group2/blob/main/vignettes/Logistic_Regression_Vignette.Rmd)
+
+The `logisticregression` package was made as a submission to the final project of Dr. Molinari's STAT 5210 class. This package makes use of the `ggplot2` package for plotting.
+
+```{r setup, message = FALSE, warning=FALSE}
+library("logisticregression")
+library("ggplot2")
+```
+
+The functions made in this package not only allow you to find the optimum coefficients that fit the response vector, but allow you to plot the model to the actual values, find the confidence intervals, find and plot the confusion matrix, and find and plot various other metrics associated with the confusion matrix as we will show you below.
+
+## Sample Data Generation
+```{r sample data}
+size <- 1000
+data <- simulate_testing_data(size)
+```
+
+The `simulate_testing_data` function, as a part of our package, enables you to simulate data to get you familiar with the package. The object, `data` generated (in this case) is a list containing the `predictors` matrix and the `response` vector. This is the only two things that you would need to find the optimal coefficients.
+
+## Finding the optimal coefficients
+```{r finding coefficients}
+lr_result <- logistic_regression(response = data$response, predictors = data$predictors)
+```
+
+It's that easy. By plugging in your `predictors` and `response` as arguments in your `logistic_regression` function, you can get your `lr_result` list object, with which you can literally do everything in this package. This object contains four objects:
+
+- `initial_beta`: The initial values of beta that the function started out with.
+- `beta_estimate`: The beta coefficient values found after the function is done performing.
+- `response`: The response vector (one of the arguments to the function).
+- `predictors`: The predictors matrix (The other argument to this function).
+
+To see how your model performed, just use the `print_summary` function and pass your `lr_result` object as the argument.
+
+## Printing Summary of the Model
+```{r print_summary}
+print_summary(lr_result = lr_result)
+```
+
+The `print_summary` function takes in the `lr_result` list object as an argument, and prints out five main things:
+
+- The initial beta values used.
+- The optimal beta values found.
+- The confusion matrix generated with a default cut-off value of 0.5.
+- Some of the main metrics, including Prevalence, accuracy, Specificity, Sensitivity, Diagnostic Odds Ratio, and False Discovery Ratio.
+- The confidence intervals found by bootstrapping, with default alpha value of 0.05 and replications = 20.
+
+
+If you would like to use a different cut_off value for your confusion matrix, You can do that as well. Use the `plot_confusion_matrix` function. It takes two arguments, your `lr_result` object and `cut_off` value.
+
+## Finding a different confusion matrix
+```{r confusion_matrix}
+result <- plot_confusion_matrix(lr_result = lr_result, cut_off = 0.4)
+```
+
+The result, in this case is the ggplot object itself. So, if you would like to plot it yourself or save it as an image, you can do that as well.
+
