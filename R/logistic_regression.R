@@ -643,4 +643,3 @@ simulate_testing_data <- function(n)
     return(list("response" = response,
                 "predictors" = predictors))
 }
-

@@ -33,9 +33,41 @@ data <- simulate_testing_data(size)
 
 The `simulate_testing_data` function, as a part of our package, enables you to simulate data to get you familiar with the package. The object, `data` generated (in this case) is a list containing the `predictors` matrix and the `response` vector. This is the only two things that you would need to find the optimal coefficients.
 
+However, for our purposes, we will be using the `adult.csv` dataset as per the project requirements. Please make sure that the csv file is in your current working directory.
+
+We will be using the Work hours, Education, and Salary as variables and the Salary as the response to see how the Logistic Regression works.
+```{r dataset}
+adult <- read.csv("adult.csv", sep = ";")
+head(adult)
+```
+
+## Data Preprocessing
+```{r preprocess}
+# Changing the column names to something better
+colnames <- colnames(adult)
+colnames[14] <- "WorkHours"
+colnames[6] <- "Education"
+colnames[16] <- "Salary"
+
+colnames(adult) <- colnames
+colnames(adult)
+```
+
+```{r preprocess2}
+adult["Salary"] <- lapply(adult["Salary"], function(x) substring(x, 2))
+
+adult$Salary <- replace(adult$Salary, adult$Salary == "<=50K", 0)
+adult$Salary <- replace(adult$Salary, adult$Salary == ">50K", 1)
+
+predictors <- cbind(adult$age, adult$WorkHours, adult$Education)
+colnames(predictors) <- c("Age", "WorkHours", "Education")
+
+response <- as.numeric(adult$Salary)
+```
+
 ## Finding the optimal coefficients
 ```{r finding coefficients}
-lr_result <- logistic_regression(response = data$response, predictors = data$predictors)
+lr_result <- logistic_regression(response = response, predictors = predictors)
 ```
 
 It's that easy. By plugging in your `predictors` and `response` as arguments in your `logistic_regression` function, you can get your `lr_result` list object, with which you can literally do everything in this package. This object contains four objects:
