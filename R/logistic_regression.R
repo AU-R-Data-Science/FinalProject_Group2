@@ -542,8 +542,6 @@ plot_diagnostic_odds_ratio <- function(lr_result)
 #' @export
 plot_logistic_regression <- function(lr_result)
 {
-    plots <- list()
-
     mean <- vector()
 
     plot_predictors <- matrix(NA, nrow = 500, ncol = ncol(lr_result$predictors))
@@ -572,10 +570,7 @@ plot_logistic_regression <- function(lr_result)
             ggplot2::ylab("Probability") +
             ggplot2::xlab(xlabel)
         print(plot)
-
-        plots <- c(plots, list(plot))
     }
-    return(plots)
 }
 
 #' Print Summary

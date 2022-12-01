@@ -159,21 +159,27 @@ The object returned by these plot functions is a list, which contains:
 ## Plotting the Metrics
 ```{r plotting_metrics}
 # Plotting Prevalence
-plot_prevalence(lr_result)
+prevalence_plot <- plot_prevalence(lr_result)
+prevalence_plot$df
 
 # Plotting Accuracy
-plot_accuracy(lr_result)
+accuracy_plot <- plot_accuracy(lr_result)
+accuracy_plot$df
 
 # Plotting Sensitivity
-plot_sensitivity(lr_result)
+sensitivity_plot <- plot_sensitivity(lr_result)
+sensitivity_plot$df
 
 # Plotting Specificity
-plot_specificity(lr_result)
+specificity_plot <- plot_specificity(lr_result)
+specificity_plot$df
 
 # Plotting False Discovery Ratio
-plot_false_discovery_ratio(lr_result)
+fdr_plot <- plot_false_discovery_ratio(lr_result)
+fdr_plot$df
 
 # Plotting Diagnostic Odds Ratio
-plot_diagnostic_odds_ratio(lr_result)
+dor_plot <- plot_diagnostic_odds_ratio(lr_result)
+dor_plot$df
 ```
 
