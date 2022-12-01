@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-Source: [`FinalProject_Group2/vignettes/Logistic_Regression_Vignette.Rmd`](https://github.com/AU-R-Data-Science/FinalProject_Group2/blob/main/vignettes/Logistic_Regression_Vignette.Rmd)
+Source: [`FinalProject_Group2/vignettes/Logistic_Regression_Vignette.Rmd`](https://github.com/AU-R-Data-Science/FinalProject_Group2/tree/main/vignettes)
 
 The `logisticregression` package was made as a submission to the final project of Dr. Molinari's STAT 5210 class. This package makes use of the `ggplot2` package for plotting.
 
@@ -60,8 +60,10 @@ The `print_summary` function takes in the `lr_result` list object as an argument
 - Some of the main metrics, including Prevalence, accuracy, Specificity, Sensitivity, Diagnostic Odds Ratio, and False Discovery Ratio.
 - The confidence intervals found by bootstrapping, with default alpha value of 0.05 and replications = 20.
 
+
 You can also plot the graph of the model you created with respect to different variables using the function `plot_logistic_regression` which takes the `lr_result` object as the only argument.
 
+## Plotting the Model with variables
 ```{r plot}
 plot_logistic_regression(lr_result = lr_result)
 ```
@@ -89,28 +91,40 @@ get_beta_confidence_intervals(lr_result = lr_result, alpha = 0.05, replications 
 
 You can also get different metrics based on the confusion matrix. You have the option of getting Prevalence, Accuracy, Sensitivity, Specificity, False Discovery Ratio, and Diagnostic Odds Ratio.
 
+## Getting Metrics
 ```{r metrics}
 # Prevalence
-get_prevalence(lr_result, cut_off = 0.5)
+prevalence <- get_prevalence(lr_result, cut_off = 0.5)
+print(prevalence)
 
 # Accuracy
-get_accuracy(lr_result, cut_off = 0.5)
+accuracy <- get_accuracy(lr_result, cut_off = 0.5)
+print(accuracy)
 
 # Sensitivity
-get_sensitivity(lr_result, cut_off = 0.5)
+sensitivity <- get_sensitivity(lr_result, cut_off = 0.5)
+print(sensitivity)
 
 # Specificity
-get_specificity(lr_result, cut_off = 0.5)
+specificity <- get_specificity(lr_result, cut_off = 0.5)
+print(specificity)
 
 # False Discovery Ratio
-get_false_discovery_ratio(lr_result, cut_off = 0.5)
+fdr <- get_false_discovery_ratio(lr_result, cut_off = 0.5)
+print(fdr)
 
 # Diagnostic Odds Ratio
-get_diagnostic_odds_ratio(lr_result, cut_off = 0.5)
+dor <- get_diagnostic_odds_ratio(lr_result, cut_off = 0.5)
+print(dor)
 ```
 
 You can plot these metrics for all cut_off values as well, to see which cut_off values give the best results. All of the plotting metric functions take the `lr_result` as the only argument.
+The object returned by these plot functions is a list, which contains:
 
+- `df`: The data frame of cut_off values and corresponding metric values.
+- `plot`: The ggplot object of the graph generated.
+
+## Plotting the Metrics
 ```{r plotting_metrics}
 # Plotting Prevalence
 plot_prevalence(lr_result)
