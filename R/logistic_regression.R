@@ -537,7 +537,6 @@ plot_diagnostic_odds_ratio <- function(lr_result)
 #'  \item{response}{The \code{double} vector containing the response used for the estimation.}
 #'  \item{predictors}{The \eqn{n \times p} \code{double} value of the matrix containing the values of the predictors used for the estimation.}
 #' }
-#' @return A \code{list} of \code{list}, where each object of the list is the value of ggplot object created for a variable.
 #' @author Saksham Goel
 #' @export
 plot_logistic_regression <- function(lr_result)

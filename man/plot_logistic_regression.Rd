@@ -15,9 +15,6 @@ plot_logistic_regression(lr_result)
  \item{predictors}{The \eqn{n \times p} \code{double} value of the matrix containing the values of the predictors used for the estimation.}
 }}
 }
-\value{
-A \code{list} of \code{list}, where each object of the list is the value of ggplot object created for a variable.
-}
 \description{
 This function plots the predicted values found from running the logistic regression.
 }
